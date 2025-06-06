@@ -43,24 +43,24 @@
 <section class="container my-4">
     <h2 class="mb-3">🕵️‍♂️ Analiza danych wyborczych – czy wszystko się zgadza?</h2>
     <p>
-        Na podstawie danych z I i II tury wyborów prezydenckich oraz znanych z sondaży
-        <strong>przepływów elektoratu</strong> opracowaliśmy wskaźnik, który pomaga zidentyfikować
-        <strong>komisje wyborcze o potencjalnie nietypowych wynikach</strong>. Wskaźnik ten –
-        <code>alert_index</code> – pokazuje procentową różnicę między <strong>oczekiwaną liczbą głosów</strong>
-        na Rafała Trzaskowskiego w II turze a <strong>rzeczywistym wynikiem</strong>.
+        Na podstawie wyników z I i II tury wyborów prezydenckich oraz danych sondażowych dotyczących
+        <strong>przepływów elektoratu</strong>, opracowaliśmy wskaźnik pozwalający wychwycić
+        <strong>komisje wyborcze o nietypowych wynikach</strong>. Ten wskaźnik –
+        <code>alert_index</code> – pokazuje, o ile procent <strong>rzeczywisty wynik</strong>
+        Rafała Trzaskowskiego w II turze różni się od <strong>oczekiwanej liczby głosów</strong>.
 
-        Oczekiwana liczba głosów Trzaskowskiego w II turze obliczana jest według wzoru:
+        Szacowana liczba głosów na Trzaskowskiego obliczana jest według wzoru:
 
-        <pre><code>
-        oczekiwana_liczba = (głosy_w_II_turze / głosy_w_I_turze) × ∑ (głosy_kandydata_z_I_tury × wskaźnik_przepływu)
-        </code></pre>
+    <pre><code>
+    oczekiwana_liczba = (głosy_w_II_turze / głosy_w_I_turze) × ∑ (głosy_kandydata_z_I_tury × wskaźnik_przepływu)
+    </code></pre>
 
-        gdzie:
-        <ul>
-          <li><strong>skala głosujących</strong> = liczba wydanych kart w II turze / liczba wydanych kart w I turze</li>
-          <li><strong>wskaźnik przepływu</strong> to szacowane prawdopodobieństwo oddania głosu na Trzaskowskiego w II turze przez wyborcę danego kandydata z I tury</li>
-        </ul>
-        Dzięki temu uwzględniamy sytuacje, w których w komisji zwiększyła się liczba uprawnionych – np. z powodu dopisania wyborców przebywających czasowo (np. wczasowiczów lub pensjonariuszy).
+    Gdzie:
+    <ul>
+        <li><strong>skala głosujących</strong> to stosunek liczby wydanych kart w II turze do liczby kart wydanych w I turze,</li>
+        <li><strong>wskaźnik przepływu</strong> to szacowane prawdopodobieństwo, że wyborca danego kandydata z I tury odda głos na Trzaskowskiego w turze drugiej.</li>
+    </ul>
+    Dzięki temu podejściu uwzględniamy również sytuacje, w których liczba uprawnionych do głosowania wzrosła – na przykład z powodu dopisania do spisu wyborców przebywających czasowo, jak wczasowicze czy pensjonariusze DPS-ów.
     </p>
 
     <h3 class="mt-4">🧮 Macierz przepływów elektoratu</h3>
@@ -92,12 +92,11 @@
 
     <h3 class="mt-4">🧓 Domy Pomocy Społecznej pod lupą</h3>
     <p>
-        Analiza ujawnia zaskakującą prawidłowość – <strong>duża część komisji z najwyższym alertem</strong> to komisje
-        zlokalizowane w Domach Pomocy Społecznej (DPS). Przykładowo:
+        Analiza ujawniła niepokojącą zależność – <strong>wśród komisji z najwyższym alertem</strong> istotną część stanowią te zlokalizowane w Domach Pomocy Społecznej (DPS). Przykład stanowi:
     </p>
     <ul>
         <li>
-            W <strong>DPS w Mianocicach</strong> (woj. małopolskie) w I turze oddano <strong>15 głosów</strong>, w tym:
+            <strong>DPS w Mianocicach</strong> (woj. małopolskie), gdzie w I turze zagłosowało <strong>15 osób</strong>, w tym m.in.:
             <ul>
                 <li>4 na Biejat</li>
                 <li>1 na Trzaskowskiego</li>
@@ -106,25 +105,22 @@
             </ul>
         </li>
         <li>
-            W II turze zagłosowały <strong>32 osoby</strong> – ponad dwukrotnie więcej, co już samo w sobie jest nietypowe.
+            W II turze frekwencja wzrosła ponad dwukrotnie – zagłosowały <strong>32 osoby</strong>, co samo w sobie jest nietypowe.
         </li>
         <li>
-            Trzaskowski zdobył tylko <strong>4 głosy</strong>, mimo że jego elektorat z I tury i głosy przepływowe powinny dać
-            co najmniej <strong>10 głosów</strong>. Z samego modelu przepływów wynika, że powinien zdobyć <strong>co najmniej 5</strong>,
-            a <strong>ma tylko 4</strong> – czyli nawet jego własny elektorat <em>nie przeszedł w całości</em>.
+            Trzaskowski uzyskał jedynie <strong>4 głosy</strong>, mimo że model przepływów wskazywał, że powinien zdobyć co najmniej <strong>5</strong>. To oznacza, że nawet jego pierwotni wyborcy nie zagłosowali na niego ponownie.
         </li>
         <li>
-            Nawrocki uzyskał <strong>27 głosów</strong>, co znacząco przekracza prognozy.
+            Nawrocki zdobył aż <strong>27 głosów</strong>, co znacząco przekracza prognozy wynikające z I tury.
         </li>
     </ul>
-
     <p>
-        Taki rozjazd może wskazywać na:
+        Tak znaczące różnice mogą świadczyć o nietypowej mobilizacji w II turze. Potencjalne przyczyny to:
     </p>
     <ul>
-        <li>organizowane głosowanie,</li>
-        <li>głosowanie przez osoby zameldowane, ale niezamieszkujące,</li>
-        <li>lub inne formy zewnętrznej ingerencji.</li>
+        <li>głosowanie zorganizowane przez osoby trzecie,</li>
+        <li>udział osób zameldowanych, ale niezamieszkujących na stałe,</li>
+        <li>inne formy zewnętrznej ingerencji w proces wyborczy.</li>
     </ul>
     </section>
 
