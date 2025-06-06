@@ -253,7 +253,7 @@
                     data.length = 10;
                 }
                 let page = Math.floor(data.start / data.length) + 1;
-                fetch(`/data/${data.length}/page_${page}.json`)
+                fetch(`/wybory2025/data/${data.length}/page_${page}.json`)
                     .then(res => res.json())
                     .then(json => {
                         currentData = json;
