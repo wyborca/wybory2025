@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Analiza komisji wyborczych</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/4.0.0/css/fixedHeader.dataTables.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .danger { background-color: #ffe5e5 !important; }
+        .warning { background-color: #fff9e5 !important; }
+        .ok { background-color: #e5ffe5 !important; }
+        .details-grid {
+            font-size: 0.8rem;
+        }
+        .details-heading {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        .details-table {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 4px 16px;
+            font-family: sans-serif;
+        }
+        .details-table dt {
+            font-weight: bold;
+            text-align: right;
+            color: #333;
+        }
+        .details-table dd {
+            margin: 0;
+            text-align: left;
+            color: #000;
+        }
+        p {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<section class="container my-4">
+    <h2 class="mb-3">🕵️‍♂️ Analiza danych wyborczych – czy wszystko się zgadza?</h2>
+    <p>
+        Na podstawie danych z I i II tury wyborów prezydenckich oraz znanych z sondaży
+        <strong>przepływów elektoratu</strong> opracowaliśmy wskaźnik, który pomaga zidentyfikować
+        <strong>komisje wyborcze o potencjalnie nietypowych wynikach</strong>. Wskaźnik ten –
+        <code>alert_index</code> – pokazuje procentową różnicę między <strong>oczekiwaną liczbą głosów</strong>
+        na Rafała Trzaskowskiego w II turze a <strong>rzeczywistym wynikiem</strong>.
+
+        Oczekiwana liczba głosów Trzaskowskiego w II turze obliczana jest według wzoru:
+
+        <pre><code>
+        oczekiwana_liczba = (głosy_w_II_turze / głosy_w_I_turze) × ∑ (głosy_kandydata_z_I_tury × wskaźnik_przepływu)
+        </code></pre>
+
+        gdzie:
+        <ul>
+          <li><strong>skala głosujących</strong> = liczba wydanych kart w II turze / liczba wydanych kart w I turze</li>
+          <li><strong>wskaźnik przepływu</strong> to szacowane prawdopodobieństwo oddania głosu na Trzaskowskiego w II turze przez wyborcę danego kandydata z I tury</li>
+        </ul>
+        Dzięki temu uwzględniamy sytuacje, w których w komisji zwiększyła się liczba uprawnionych – np. z powodu dopisania wyborców przebywających czasowo (np. wczasowiczów lub pensjonariuszy).
+    </p>
+
+    <h3 class="mt-4">🧮 Macierz przepływów elektoratu</h3>
+    <p>
+        Do obliczenia oczekiwanych wyników w II turze wykorzystaliśmy następującą macierz przepływu głosów
+        (prawdopodobieństwo oddania głosu na Trzaskowskiego w II turze przez wyborcę danego kandydata z I tury):
+    </p>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm w-auto">
+            <thead class="table-light">
+            <tr>
+                <th>Kandydat (I tura)</th>
+                <th>% wyborców głosujących na Trzaskowskiego w II turze</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr><td>MENTZEN Sławomir Jerzy</td><td>88,1%</td></tr>
+            <tr><td>BRAUN Grzegorz Michał</td><td>92,5%</td></tr>
+            <tr><td>HOŁOWNIA Szymon Franciszek</td><td>13,8%</td></tr>
+            <tr><td>ZANDBERG Adrian Tadeusz</td><td>16,2%</td></tr>
+            <tr><td>BIEJAT Magdalena Agnieszka</td><td>9,8%</td></tr>
+            <tr><td>SENYSZYN Joanna</td><td>18,9%</td></tr>
+            <tr><td>STANOWSKI Krzysztof Jakub</td><td>51,2%</td></tr>
+            <tr><td>TRZASKOWSKI Rafał Kazimierz</td><td>1%</td></tr>
+            <tr><td>NAWROCKI Karol Tadeusz</td><td>0,7%</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="mt-4">🧓 Domy Pomocy Społecznej pod lupą</h3>
+    <p>
+        Analiza ujawnia zaskakującą prawidłowość – <strong>duża część komisji z najwyższym alertem</strong> to komisje
+        zlokalizowane w Domach Pomocy Społecznej (DPS). Przykładowo:
+    </p>
+    <ul>
+        <li>
+            W <strong>DPS w Mianocicach</strong> (woj. małopolskie) w I turze oddano <strong>15 głosów</strong>, w tym:
+            <ul>
+                <li>4 na Biejat</li>
+                <li>1 na Trzaskowskiego</li>
+                <li>2 na Maciaka</li>
+                <li>2 na Mentzena</li>
+            </ul>
+        </li>
+        <li>
+            W II turze zagłosowały <strong>32 osoby</strong> – ponad dwukrotnie więcej, co już samo w sobie jest nietypowe.
+        </li>
+        <li>
+            Trzaskowski zdobył tylko <strong>4 głosy</strong>, mimo że jego elektorat z I tury i głosy przepływowe powinny dać
+            co najmniej <strong>10 głosów</strong>. Z samego modelu przepływów wynika, że powinien zdobyć <strong>co najmniej 5</strong>,
+            a <strong>ma tylko 4</strong> – czyli nawet jego własny elektorat <em>nie przeszedł w całości</em>.
+        </li>
+        <li>
+            Nawrocki uzyskał <strong>27 głosów</strong>, co znacząco przekracza prognozy.
+        </li>
+    </ul>
+
+    <p>
+        Taki rozjazd może wskazywać na:
+    </p>
+    <ul>
+        <li>organizowane głosowanie,</li>
+        <li>głosowanie przez osoby zameldowane, ale niezamieszkujące,</li>
+        <li>lub inne formy zewnętrznej ingerencji.</li>
+    </ul>
+</section>
+<table id="results" class="display" style="width:100%">
+    <thead>
+    <tr>
+        <th>Nr komisji</th>
+        <th>Gmina</th>
+        <th>Powiat</th>
+        <th>Województwo</th>
+        <th>Typ obwodu</th>
+        <th>Frekwencja I</th>
+        <th>Frekwencja II</th>
+        <th>Trzaskowski I</th>
+        <th>Oczekiwania T.</th>
+        <th>Trzaskowski II</th>
+        <th>Nawrocki I</th>
+        <th>Oczekiwania N.</th>
+        <th>Nawrocki II</th>
+        <th>Zmiana T. (%)</th>
+        <th>Zmiana N. (%)</th>
+        <th>Delta T. (%)</th>
+        <th>Delta N. (%)</th>
+        <th>Alert index (%)</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.3.1/js/dataTables.js"></script>
+
+<script>
+    const mappedColumns = [
+        row => row.commission["Nr komisji"],
+        row => row.commission["Gmina"],
+        row => row.commission["Powiat"],
+        row => row.commission["Województwo"],
+        row => row.commission["Typ obwodu"],
+        row => row.turnout.first,
+        row => row.turnout.second,
+        row => row.first_round["TRZASKOWSKI Rafał Kazimierz_1"],
+        row => row.calculations["expected_trzaskowski"],
+        row => row.second_round["TRZASKOWSKI Rafał Kazimierz_2"],
+        row => row.first_round["NAWROCKI Karol Tadeusz_1"],
+        row => row.calculations["expected_nawrocki"],
+        row => row.second_round["NAWROCKI Karol Tadeusz_2"],
+        row => row.calculations["change_TRZASKOWSKI Rafał Kazimierz_pct"].toFixed(2),
+        row => row.calculations["change_NAWROCKI Karol Tadeusz_pct"].toFixed(2),
+        row => row.calculations["delta_trzaskowski"].toFixed(2),
+        row => row.calculations["delta_nawrocki"].toFixed(2),
+        row => row.calculations["alert_index_pct"].toFixed(2)
+    ];
+
+    function formatDetails(row) {
+        return `
+    <div class="details-grid">
+        <h4 class="details-heading">Dane komisji:</h4>
+        <p><strong>Siedziba:</strong> ${row.commission["Siedziba"]}</p>
+        <p><strong>Typ obwodu:</strong> ${row.commission["Typ obwodu"]}</p>
+        <p><strong>Typ obszaru:</strong> ${row.commission["Typ obszaru"]}</p>
+        <p><strong>Teryt Gminy:</strong> ${row.commission["Teryt Gminy"]}</p>
+        <p><strong>Teryt Powiatu:</strong> ${row.commission["Teryt Powiatu"]}</p>
+        <h4 class="details-heading">Wyniki I tury</h4>
+        <dl class="details-table">
+            <dt>BIEJAT</dt><dd>${row.first_round["BIEJAT Magdalena Agnieszka_1"]}</dd>
+            <dt>TRZASKOWSKI</dt><dd>${row.first_round["TRZASKOWSKI Rafał Kazimierz_1"]}</dd>
+            <dt>HOŁOWNIA</dt><dd>${row.first_round["HOŁOWNIA Szymon Franciszek_1"]}</dd>
+            <dt>SENYSZYN</dt><dd>${row.first_round["SENYSZYN Joanna_1"]}</dd>
+            <dt>ZANDBERG</dt><dd>${row.first_round["ZANDBERG Adrian Tadeusz_1"]}</dd>
+            <dt>BARTOSZEWICZ</dt><dd>${row.first_round["BARTOSZEWICZ Artur_1"]}</dd>
+            <dt>BRAUN</dt><dd>${row.first_round["BRAUN Grzegorz Michał_1"]}</dd>
+            <dt>JAKUBIAK</dt><dd>${row.first_round["JAKUBIAK Marek_1"]}</dd>
+            <dt>MACIAK</dt><dd>${row.first_round["MACIAK Maciej_1"]}</dd>
+            <dt>MENTZEN</dt><dd>${row.first_round["MENTZEN Sławomir Jerzy_1"]}</dd>
+            <dt>NAWROCKI</dt><dd>${row.first_round["NAWROCKI Karol Tadeusz_1"]}</dd>
+            <dt>STANOWSKI</dt><dd>${row.first_round["STANOWSKI Krzysztof Jakub_1"]}</dd>
+            <dt>WOCH</dt><dd>${row.first_round["WOCH Marek Marian_1"]}</dd>
+        </dl>
+    </div>`;
+    }
+
+    let currentData = [];
+
+    $(document).ready(function () {
+        const table = $('#results').DataTable({
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/2.3.1/i18n/pl.json"
+            },
+            fixedHeader: true,
+            columns: [
+                {
+                    className: 'dt-control',
+                    orderable: false,
+                    data: null,
+                    defaultContent: '',
+                    title: '',
+                },
+                { title: "Nr komisji" },
+                { title: "Gmina" },
+                { title: "Powiat" },
+                { title: "Województwo" },
+                { title: "Typ obwodu" },
+                { title: "Frekwencja I" },
+                { title: "Frekwencja II" },
+                { title: "Trzaskowski I" },
+                { title: "Oczekiwania T" },
+                { title: "Trzaskowski II" },
+                { title: "Nawrocki I" },
+                { title: "Oczekiwania N" },
+                { title: "Nawrocki II" },
+                { title: "Zmiana T. (%)" },
+                { title: "Zmiana N. (%)" },
+                { title: "Delta T. (%)" },
+                { title: "Delta N. (%)" },
+                { title: "Alert index (%)" },
+            ],
+            searching: false,
+            ordering: false,
+            serverSide: true,
+            ajax: function (data, callback) {
+                console.log('data', data);
+                if (typeof data.start === 'undefined') {
+                    data.start = 0;
+                }
+                if (typeof data.length === 'undefined') {
+                    data.length = 10;
+                }
+                let page = Math.floor(data.start / data.length) + 1;
+                fetch(`/data/${data.length}/page_${page}.json`)
+                    .then(res => res.json())
+                    .then(json => {
+                        currentData = json;
+                        const rows = json.map(row => [''].concat(mappedColumns.map(fn => fn(row))));
+                        callback({
+                            draw: data.draw,
+                            recordsTotal: 32057,
+                            recordsFiltered: 32057,
+                            data: rows
+                        });
+                    });
+            },
+            createdRow: function (row, data, dataIndex, cells) {
+                const alert = parseFloat(data[18]);
+                if (alert > 90) {
+                    $(row).addClass('danger');
+                } else if (alert > 70) {
+                    $(row).addClass('warning');
+                } else {
+                    $(row).addClass('ok');
+                }
+
+                // Highlight Domy Pomocy Społecznej
+                const type = data[5].toLowerCase();
+                if (type.includes('dom pomocy społecznej') || type.includes('zakład leczniczy')) {
+                    $(cells[5]).css('background-color', '#f8d7da'); // Bootstrap danger background
+                    $(cells[5]).css('font-weight', 'bold');
+                    $(cells[5]).css('color', '#721c24');
+                }
+            }
+        });
+
+        $('#results tbody').on('click', 'td.dt-control', function () {
+            const tr = $(this).closest('tr');
+            const row = table.row(tr);
+            const rowIndex = tr.index();
+            const realRow = currentData[rowIndex];
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                row.child(formatDetails(realRow)).show();
+                tr.addClass('shown');
+            }
+        });
+    });
+</script>
+<script src="https://cdn.datatables.net/fixedheader/4.0.0/js/dataTables.fixedHeader.min.js"></script>
+</body>
+</html>
